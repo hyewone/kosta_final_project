@@ -24,15 +24,15 @@ public class CareerController {
 
 	@RequestMapping("/caregiverMyCareerList")
 	public String careerList(Model m) {
-		// session¿¡¼­ ¾ò¾î¿Â cno·Î
+		// sessionì—ì„œ ì–»ì–´ì˜¨ cnoë¡œ
 		int cno = 2;
 		ContractVO conlist = dao.selectCareerList(cno);
-		//castate¿¡ µû¶ó Ãâ·Â°ªÀÌ ´Ù¸£°Ô ÇØÁÜ
+		//castateì— ë”°ë¼ ì¶œë ¥ê°’ì´ ë‹¤ë¥´ê²Œ í•´ì¤Œ
 		for (CareerVO e : conlist.getCalist()) {
 			if (e.getCastate().equals("N")) {
-				e.setCastate("±Ù¹«Áß");
+				e.setCastate("ê·¼ë¬´ì¤‘");
 			} else if (e.getCastate().equals("Y")) {
-				e.setCastate("±Ù¹«Á¾·á");
+				e.setCastate("ê·¼ë¬´ì¢…ë£Œ");
 			}
 		}
 		m.addAttribute("conlist", conlist);
@@ -42,9 +42,10 @@ public class CareerController {
 	@RequestMapping("/downloadExcel")
 	public ModelAndView downloadExcel(@RequestParam("cno") int cno) {
 		//List<ShowVO> listShow = dao.listTboard();
-		//¿¢¼¿´Ù¿î ¹öÆ° Å¬¸¯½Ã cno¸¦ jsp¿¡¼­ ÇÔ²² º¸³»ÁÖ¾î ÆÄ¶ó¹ÌÅÍ·Î ¹Ş´Â´Ù.
+		//ì—‘ì…€ë‹¤ìš´ ë²„íŠ¼ í´ë¦­ì‹œ cnoë¥¼ jspì—ì„œ í•¨ê»˜ ë³´ë‚´ì£¼ì–´ íŒŒë¼ë¯¸í„°ë¡œ ë°›ëŠ”ë‹¤.
 		ContractVO conlist = dao.selectCareerList(cno);
-		//ºäÀÌ¸§, ¸ğµ¨ÀÌ¸§, ¸ğµ¨°ªÁÖ¼Ò
+		//ë·°ì´ë¦„, ëª¨ë¸ì´ë¦„, ëª¨ë¸ê°’ì£¼ì†Œ
 		return new ModelAndView("excelView", "conlist" , conlist);
+		//test
 	}
 }
