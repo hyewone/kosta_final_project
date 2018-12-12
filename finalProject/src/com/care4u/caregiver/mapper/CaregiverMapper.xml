@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="caregiver">
+	<!-- 간병인 신청 -->
+	<insert id="insertRequest" parameterType="cvo">
+		insert into caregiver
+		values(caregiver_seq.nextVal,
+		#{uno},
+		#{cidenimg},
+		#{cbank},
+		#{caccount},
+		sysdate,
+		#{cstate}
+		)
+	</insert>
+	
+	<!-- 간병인 프로필 등록 -->
+	<insert id="insertProfile" parameterType="cpvo">
+		insert into careprofile
+		values(careprofile_seq.nextVal,
+		#{cno},
+		#{cpname},
+		#{cpimg},
+		#{cpcareeryear},
+		#{cpcareermonth},
+		#{cpbirth},
+		#{cploc},
+		#{cpintroduce},
+		#{cpagree}
+		)
+	</insert>
+	
+	<!-- 간병인 프로필 수정시 불러올 정보 -->
+	<select id="updateSelectProfile" parameterType="int"
+		resultType="cpvo">
+		select *
+		from careprofile
+		where cpno=#{cpno}
+	</select>
+	
+	<!-- 간병인 프로필 수정 -->
+	<update id="updateProfile" parameterType="cpvo">
+		update careprofile set
+		cpno=#{cpno},
+		cno=#{cno},
+		cpname=#{cpname},
+		cpimg=#{cpimg},
+		cpcareeryear=#{cpcareeryear},
+		cpcareermonth=#{cpcareermonth},
+		cpbirth=#{cpbirth},
+		cploc=#{cploc},
+		cpintroduce=#{cpintroduce},
+		cpagree=#{cpagree}
+		where cpno = #{cpno}
+	</update>
+	
+	<!-- cno로 conno 얻기 -->
+	<select id="getConno" parameterType="int" resultType="int">
+		select
+		con.conno
+		from contract con, careprofile cp, match m
+		where cp.cno=#{cno}
+		and cp.cpno = m.cpno and m.mno = con.mno
+	</select>
+	
+	<!-- 월차 신청 및 수정 -->
+	<insert id="insertMonthly" parameterType="monvo">
+		insert into monthly
+		values(monthly_seq.nextVal,
+		#{cno},
+		#{conno},
+		#{mondate},
+		#{monstate}
+		)
+	</insert>
+	
+	<!-- 간병인 월차 수정시 불러올 정보 -->
+	<select id="updateSelectMontly" parameterType="int"
+		resultType="monvo">
+		select *
+		from monthly
+		where monno=#{monno}
+	</select>
+	
+	<!-- 간병인 경력 리스트 -->
+	<resultMap type="convo" id="contractCareerJoinResultMap1">
+		<id property="conno" column="conno" javaType="int" />
+		<result property="conaddr1" column="conaddr1" />
+		<result property="constartdate" column="constartdate"/>
+		<result property="conenddate" column="conenddate"/>
+		<collection property="calist" javaType="java.util.List"
+			resultMap="contractCareerJoinResultMap2" ofType="cavo" />
+	</resultMap>
+	<!--collection될 ResultMap -->
+	<resultMap type="cavo" id="contractCareerJoinResultMap2">
+		<id property="cano" column="cano" javaType="int" />
+		<result property="cno" column="cno" />
+		<result property="conno" column="conno" />
+		<result property="castate" column="castate"/>
+	</resultMap>
+	<select id="selectCareerList" parameterType="int" resultMap="contractCareerJoinResultMap1">
+		select ca.cano, ca.cno, ca.conno, con.conaddr1, con.constartdate, con.conenddate,
+		ca.castate
+		from career ca, contract con
+		where ca.cno = #{cno} and con.conno = ca.conno
+	</select>
+	
+	<!-- cvo로 계좌중복확인 -->
+	<select id="chkaccount" parameterType="cvo" resultType="int">
+		select count(*)
+		from caregiver
+		where caccount=#{caccount}
+	</select>
+
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  <configuration>
+  <typeAliases>
+  <typeAlias type="com.care4u.caregiver.vo.CaregiverVO" alias="cvo"/>
+  <typeAlias type="com.care4u.caregiver.vo.CaregiverProfileVO" alias="cpvo"/>
+  <typeAlias type="com.care4u.caregiver.vo.CareerVO" alias="cavo"/>
+  <typeAlias type="com.care4u.caregiver.vo.MonthlyVO" alias="monvo"/>
+  <typeAlias type="com.care4u.caregiver.vo.ContractVO" alias="convo"/>
+  <typeAlias type="com.care4u.caregiver.vo.LoginVO" alias="lvo"/>
+  </typeAliases>
+ </configuration>
